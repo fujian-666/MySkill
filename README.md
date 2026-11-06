@@ -2,6 +2,8 @@
 
 **把审计一线的数据处理经验，沉淀成 AI 能直接执行的方法论 Skill。**
 
+> 本仓库由 **fujian-666** 维护整理，收录其常用的审计与毛利率分析 Skill。
+
 <p>
   <img alt="license" src="https://img.shields.io/badge/license-MIT-blue.svg">
   <img alt="python" src="https://img.shields.io/badge/python-3.10%2B-3776AB.svg">
@@ -123,15 +125,15 @@ flowchart LR
 
 ### 方式一：作为 Skill 使用（推荐）
 
-把 skill 目录放进 Claude Code 的 skills 目录，AI 会在命中触发词时自动加载：
+把 skill 目录放进 WorkBuddy 的 skills 目录，AI 会在命中触发词时自动加载：
 
 ```bash
 # 全局可用
-cp -r audit-basis-sense ~/.claude/skills/
-cp -r gross-margin-attribution ~/.claude/skills/
+cp -r audit-basis-sense ~/.workbuddy/skills/
+cp -r gross-margin-attribution ~/.workbuddy/skills/
 
 # 或仅在当前项目可用
-cp -r audit-basis-sense ./project/.claude/skills/
+cp -r audit-basis-sense ./project/.workbuddy/skills/
 ```
 
 然后直接说人话就行：
