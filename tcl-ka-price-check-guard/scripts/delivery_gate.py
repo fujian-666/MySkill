@@ -14,6 +14,8 @@
   G3 基线保真：sheet/图片/错误值/真公式/行数/金额链/AH=C27/C28/C26
   G4 13项双向一致性（check_tz_cs_consistency.py）
   G5 业务视图：结论区空、K/U/AE 内部出处归零、三列专属词、U一致短词、条目数、G/H空、OA证据行、AD无空白
+  G5 第五步列归属（check_ad_ae_ownership.py）：AD 是【核对方】自行填列（业务不填、也不掌握总部价），
+     AE 是 AD 填完后的备注列；严禁把 AD 说成业务填的列
   G6 全簿diff（给 --prev 时）：格数=plan、数值公式列零改动、真公式文本零改动
 
 🔴 四元组不同 = 另一张表。所有基线/列位/口径都来自 config/profile.json，绝不套用别的表。
@@ -241,6 +243,22 @@ def gate(args):
           or str(V.get((CHECK, r, 8)) or "").strip()]
     rec("G5 情况表条目数 / G-H留空", len(items) == P["items"] and not gh,
         "条目%d 已填G/H %d" % (len(items), len(gh)))
+
+    # G5 第五步列归属（用户 11-12 14:44 纠正）：AD 是核对方自行填列，业务不填也不掌握总部价；
+    # AE 是 AD 填完后的备注列。只读断言，绝不改文件。
+    owner = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                         "check_ad_ae_ownership.py")
+    if os.path.exists(owner):
+        cmd = [sys.executable, owner, os.path.abspath(path)]
+        if P.get("_profile_file"):
+            cmd += ["--profile", P["_profile_file"]]
+        q = subprocess.run(cmd, capture_output=True, text=True,
+                           encoding="utf-8", errors="replace")
+        rec("G5 AD/AE第五步列归属8项断言", q.returncode == 0,
+            "退出码%d %s" % (q.returncode, (q.stdout or "").strip().splitlines()[-2]
+                            if q.returncode == 0 else (q.stdout or q.stderr or "")[-160:]))
+    else:
+        rec("G5 AD/AE第五步列归属8项断言", False, "缺 check_ad_ae_ownership.py")
 
     # G6 全簿 diff
     if args.prev:

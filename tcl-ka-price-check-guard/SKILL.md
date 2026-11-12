@@ -1,6 +1,6 @@
 ---
 name: tcl-ka-price-check-guard
-description: TCL KA 价差核对（制表 + 核对情况表）的质量固化层与交付门禁。用于低控表/价差表按「战区×渠道×月份×版本」四元组分型、型号归一化四路匹配、三列备注专属词、制表↔情况表双向一致性 10 项、零基准保护、业务视图脱敏、跨日版本命名、全簿 diff、业务原因回填、交付前 21 项门禁。触发词：价差核对、低控表、核对情况表、供价不对、授权底价不对、总部价格不对、交付门禁、版本从V1、全簿diff、业务反馈回填、事实数据说话。
+description: TCL KA 价差核对（制表 + 核对情况表）的质量固化层与交付门禁。用于低控表/价差表按「战区×渠道×月份×版本」四元组分型、型号归一化四路匹配、三列备注专属词、制表↔情况表双向一致性 13 项、零基准保护、业务视图脱敏、跨日版本命名、全簿 diff、业务原因回填、交付前 25 项门禁。触发词：价差核对、低控表、核对情况表、供价不对、授权底价不对、总部价格不对、交付门禁、版本从V1、全簿diff、业务反馈回填、事实数据说话。
 agent_created: true
 version: 1.0.0
 ---
@@ -29,6 +29,7 @@ version: 1.0.0
 4. **只改该改的格**：数值列、差额公式、金额链、真公式文本一律不碰；改文案就只改文案。全簿 diff 必须等于 plan 格集合。
 5. **每条被纠正的规则，当场变成可执行断言/脚本**，不能只写进记忆。这是本 skill 存在的唯一理由。
 6. **改完必独立复核**：一致性 ≠ 真一致；「标一致的行」也要查差额是不是真的 0。
+7. **第五步列归属别搞反**：AD「总部最低零售限价」是**核对方自己填的列**（业务不填、也不掌握总部价，业务原表同名列只是 `=O{r}` / 空白 / 外链公式的空壳）；**AD 填完 → AE 紧随其右写备注**。严禁说「AD 是业务填的列」。每版由 `check_ad_ae_ownership.py` 8 项硬断言守住。
 
 ## 2. 每版固定动作（一步不许省）
 
@@ -38,7 +39,7 @@ version: 1.0.0
 ③ COM 逐格写 + 逐格读回                    Calculation=-4135 必须在 Open 之后
 ④ --next 取当天下一版名，另存新文件         绝不覆盖上一版
 ⑤ 独立 verify 全簿 diff                    值层/公式层双扫，真公式文本零改动
-⑥ delivery_gate.py --prev <上版> --expect-diff N --plan <plan.json>   21 项全过
+⑥ delivery_gate.py --prev <上版> --expect-diff N --plan <plan.json>   25 项全过
 ⑦ 记忆 / 日志固化
 ⑧ present_files 交付
 ```
@@ -101,8 +102,9 @@ version: 1.0.0
 |---|---|
 | `python scripts/model_key.py` | 型号归一化自测（PASS 才可参与匹配） |
 | `python scripts/identify_table.py "<件>"` | 表型识别 + 月份交叉校验 |
-| `python scripts/check_tz_cs_consistency.py "<件>"` | 10 项双向一致性，退出码 0 = 全过 |
-| `python scripts/delivery_gate.py "<件>" --prev "<上版>" --expect-diff N --plan "<plan.json>"` | 21 项交付门禁 |
+| `python scripts/check_tz_cs_consistency.py "<件>"` | 13 项双向一致性，退出码 0 = 全过 |
+| `python scripts/check_ad_ae_ownership.py "<件>"` | 第五步列归属 8 项：AD 是核对方填列（业务不填、不掌握总部价），AE 是 AD 填完后的备注 |
+| `python scripts/delivery_gate.py "<件>" --prev "<上版>" --expect-diff N --plan "<plan.json>"` | 25 项交付门禁 |
 | `python scripts/delivery_gate.py --next "<件>"` | 当天下一版名 |
 | `python scripts/backfill_reason_to_tz.py --file "<源>" --out "<新>" --apply` | 业务原因回填（默认预览） |
 | `from style_check_sheet import apply_standard` | 核对情况表标准样式（COM 内调用，幂等） |

@@ -104,7 +104,7 @@ finally:
 - 供价核对 → K、公司授权底价核对 → U、总部底价核对 → AE。
 - 追加 `｜业务反馈：{G}；依据：{H}`，先剥旧段再写，**幂等**。
 - 目标格是公式 → 阻断，不覆盖。
-- 另存新文件，落盘后自动复跑 10 项一致性；不过就报错。
+- 另存新文件，落盘后自动复跑 13 项一致性；不过就报错。
 - G/H 全空 → 明确输出「无可回填内容」，不生成空转文件。
 
 ## 7. 交付前自检顺序
@@ -112,7 +112,7 @@ finally:
 1. `model_key.py` 自测 PASS
 2. `identify_table.py` 无冲突
 3. 独立 verify 全簿 diff（值层 + 公式层）
-4. `check_tz_cs_consistency.py` 10 项全过
-5. `delivery_gate.py --prev ... --expect-diff N --plan ...` 21 项全过
+4. `check_tz_cs_consistency.py` 13 项全过
+5. `delivery_gate.py --prev ... --expect-diff N --plan ...` 25 项全过
 6. 拿上一版做**反向验证**，确认门禁能拦住已知缺陷
 7. 记忆/日志 → 交付

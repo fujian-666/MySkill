@@ -14,7 +14,7 @@ TCL 华南大区 KA 价差核对的**规则固化层 + 交付门禁**：把多�
 | 只查外部表就下「没有」结论，内嵌战区表其实有价 | 四路匹配链写死，每版全量回归 |
 | 不同口径的数硬相减，凭空造出几百条差异 | 表头批注必读 + 口径不串 |
 | 三个价格用一个简称抹平 | 第 10 项「三列不串词」+ 门禁 G5 |
-| 校验只查「两边一致」，没查「标一致的行是否真一致」 | 一致性 10 项（含差额 =0 / ≠0 / 零基准豁免） |
+| 校验只查「两边一致」，没查「标一致的行是否真一致」 | 一致性 13 项（含差额 =0 / ≠0 / 零基准豁免） |
 | 沿用前一天版本号 | 门禁 G1 + `--next` 自动取当天下一版名 |
 | 内部取数出处写进业务视图 | 业务视图只留待办标注，结论说明单独发负责人 |
 | 为让校验变绿而放宽判据 | 先坐实 I=0/S=0 才豁免，第 8 项闭环 |
@@ -33,8 +33,9 @@ TCL 华南大区 KA 价差核对的**规则固化层 + 交付门禁**：把多�
 │   ├── profile.py                   # 配置加载（KA_PROFILE > profile.json > example）
 │   ├── model_key.py                 # 型号归一化 + selftest
 │   ├── identify_table.py            # 表型识别 + 月份交叉校验（只读）
-│   ├── check_tz_cs_consistency.py   # 制表↔情况表 10 项一致性（只读）
-│   ├── delivery_gate.py             # 21 项交付门禁 + --next（只读）
+│   ├── check_tz_cs_consistency.py   # 制表↔情况表 13 项一致性（只读）
+│   ├── check_ad_ae_ownership.py     # 第五步列归属 8 项（AD 核对方填 / AE 其后备注）
+│   ├── delivery_gate.py             # 25 项交付门禁 + --next（只读）
 │   ├── backfill_reason_to_tz.py     # 业务原因回填（COM 写入，另存新版本）
 │   └── style_check_sheet.py         # 核对情况表标准样式（COM，幂等）
 └── references/
@@ -99,10 +100,10 @@ python scripts/identify_table.py "<xlsx>"
 # 2. 每版交付前：命名建议
 python scripts/delivery_gate.py --next "<任一现有xlsx>"
 
-# 3. 十项一致性
+# 3. 13 项一致性
 python scripts/check_tz_cs_consistency.py "<xlsx>"
 
-# 4. 二十一项门禁（不给 --prev 则跳过全簿 diff 段）
+# 4. 25 项门禁（不给 --prev 则跳过全簿 diff 段）
 python scripts/delivery_gate.py "<xlsx>" \
     --prev "<上一版xlsx>" --expect-diff 86 --plan "<plan.json>"
 
