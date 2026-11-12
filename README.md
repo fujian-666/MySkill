@@ -23,6 +23,7 @@
 - [快速开始](#快速开始)
 - [Skill 1：audit-basis-sense（审计基感知）](#skill-1audit-basis-sense审计基感知)
 - [Skill 2：gross-margin-attribution（毛利率归因）](#skill-2gross-margin-attribution毛利率归因)
+- [附加收录：tcl-ka-price-check-guard](#附加收录tcl-ka-price-check-guardka-价差核对)
 - [设计原则](#设计原则)
 - [环境与依赖](#环境与依赖)
 - [常见问题与边界](#常见问题与边界)
@@ -367,6 +368,19 @@ export PYTHONIOENCODING=utf-8     # 避免中文列名输出乱码
 
 ---
 
+## 附加收录：tcl-ka-price-check-guard（KA 价差核对）
+
+把「连锁渠道月度价差核对」的踩坑经验，沉淀成一套**可执行断言 + 交付门禁**的 Skill：型号归一化、四路源表匹配链、三个价格各列专属描述、制表与核对情况表双向一致、全簿 diff 与金额链保真。适用于月度 KA 低控表核对。
+
+- 入口：[tcl-ka-price-check-guard/SKILL.md](tcl-ka-price-check-guard/SKILL.md)
+- 规则与复盘：`references/RULES.md`、`references/POSTMORTEM.md`、`references/EXCEL_COM_PITFALLS.md`
+- 可运行工具：`scripts/`（表型识别、13 项一致性校验、24 项交付门禁、原因回填、型号归一化）
+- 配置：`config/profile.example.json`（真实业务配置不入库，由使用者按四元组「战区 × 渠道 × 月份 × 版本」自行填写）
+
+> 该 Skill 与上面两个审计 Skill 领域不同，独立收录、互不依赖；仓库主体仍围绕审计与毛利率分析。
+
+---
+
 ## 仓库结构
 
 ```text
@@ -383,7 +397,7 @@ MySkill/
 │       ├── patterns.md              # 4 类底稿模式
 │       └── examples.md              # 4 个实战案例
 │
-└── gross-margin-attribution/        # Skill 2（352 KB）
+├── gross-margin-attribution/        # Skill 2（352 KB）
     ├── SKILL.md                     # 执行入口：硬规则 + 4 步流程
     ├── scripts/
     │   ├── inspect_schema.py        # 字段画像 → schema.json
@@ -394,6 +408,13 @@ MySkill/
     ├── assets/                      # HTML / CSS / JS 模板
     ├── references/                  # concepts / mapping / report / overview
     └── examples/                    # case1 的 schema / mapping / 报告
+│
+└── tcl-ka-price-check-guard/        # 附加收录：KA 价差核对
+    ├── SKILL.md                     # 执行入口：铁律 + 每版固定动作
+    ├── README.md
+    ├── config/profile.example.json  # 四元组配置模板（真实配置不入库）
+    ├── references/                  # RULES / WORKFLOW / POSTMORTEM / EXCEL_COM_PITFALLS
+    └── scripts/                     # 13 项一致性 + 24 项交付门禁 + 回填 + 型号归一化
 ```
 
 ---

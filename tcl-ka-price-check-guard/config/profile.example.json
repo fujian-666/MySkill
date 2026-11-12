@@ -1,0 +1,67 @@
+{
+  "_说明": "四元组配置模板。战区×渠道×月份×版本 任一不同 = 另一张表，必须复制本文件为 config/profile.json 后重填，绝不套用别的表基线。profile.json 已 gitignore，不入库。",
+  "_基线说明": "baseline / word_counts / items / oa_evidence_rows 是某一个具体交付件的实测值，模板里给 0 占位；跑门禁前必须按当前交付件实测填入，填 0 = 该项断言必然失败（这是有意的防呆）。",
+
+  "quad": "长沙·五星·10月",
+  "owner": "<负责人>",
+  "price_root": "",
+  "source_paths": {},
+  "identify_script": "${SKILL_DIR}/scripts/identify_table.py",
+
+  "sheets": {
+    "main": "制表",
+    "check": "核对情况表",
+    "summary": "汇总表"
+  },
+  "header_row": 2,
+  "first_row": 3,
+  "last_row": 810,
+  "read_max_row": 812,
+  "read_max_col": 36,
+  "check_max_row": 140,
+  "check_max_col": 9,
+  "conclusion_rows": [104, 114],
+
+  "cols": {
+    "H": 8, "I": 9, "J": 10, "K": 11,
+    "R": 18, "S": 19, "T": 20, "U": 21,
+    "AD": 30, "AE": 31, "AG": 33, "AH": 34
+  },
+  "num_cols": [8, 9, 10, 18, 19, 20, 30, 33, 34],
+
+  "types": ["供价核对", "公司授权底价核对", "总部底价核对"],
+  "type2price_col": {"供价核对": 8, "公司授权底价核对": 18, "总部底价核对": 30},
+  "type2remark_col": {"供价核对": 11, "公司授权底价核对": 21, "总部底价核对": 31},
+  "words": {"K": "供价不对", "U": "授权底价不对", "AE": "总部价格不对"},
+  "word_counts": {"K": 0, "U": 0, "AE": 0},
+  "white": ["一致", "退货", "OA备案价"],
+  "backfill_mark": "业务反馈",
+  "u_ok_word": "授权底价一致",
+  "ae_short_labels": ["淘汰机", "CIOT门锁", "淘汰机，业务需确认"],
+  "oa_evidence_prefix": ["OA《", "按OA《", "(OA号"],
+  "ad_zero_expect_rows": 0,
+
+  "internal_keywords": [
+    "淘汰机价格表", "战区10月价格表", "大区价格表无此型号", "现净供价",
+    "AD取此价", "TCL智能门锁", "请业务确认或提供OA依据", "请人工确认",
+    "标准机行", "非智屏", "商返机表", "按0计", "r881", "请确认是否认可",
+    "总部最低零售限价按此OA到手价取数", "公司授权底价与10月华南大区智屏价格表当月零售价一致"
+  ],
+
+  "baseline": {
+    "sheets": 0,
+    "media": 0,
+    "errors": 0,
+    "formulas": 0,
+    "rows": 0,
+    "ah": 0,
+    "c28": 0,
+    "c26": 0,
+    "summary_row_c27": 27,
+    "summary_row_c28": 28,
+    "summary_row_c26": 26,
+    "summary_col": 3
+  },
+  "oa_evidence_rows": 0,
+  "items": 0
+}
